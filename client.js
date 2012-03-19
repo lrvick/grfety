@@ -11,6 +11,7 @@ window.onload = function(){
     },0);
     canvas.addEventListener('mouseup', function(e){
         this.mousedown = false;
+        //this.snapshot = canvas.toDataURL('image/jpeg');
         sock.send(JSON.stringify(this.path))
     }),0;
     canvas.addEventListener('mousemove', function(e){

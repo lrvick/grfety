@@ -18,6 +18,7 @@ much, but if nothing else it should show off the power of SockJS and Canvas.
   * Multiple people can draw at the same time
   * Fills the browser window
   * Auto-reconnection
+  * Saves and restores snapshots automatically
   * You can draw with the color white
 
 ## Usage / Installation ##

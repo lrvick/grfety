@@ -33,7 +33,7 @@ much, but if nothing else it should show off the power of SockJS and Canvas.
 2. Install node modules
 
     ```bash
-    npm install node-static sockjs
+    npm install node-static sockjs canvas
     ```
 
 3. Start server

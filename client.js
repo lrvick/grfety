@@ -15,20 +15,39 @@ window.onload = function(){
         sock.send(JSON.stringify(this.path))
     }),0;
     canvas.addEventListener('mousemove', function(e){
-        with(context){
+      with(context){
         if (this.mousedown){
           beginPath();
           moveTo(this.x, this.y);
           lineTo(e.pageX, e.pageY);
-          strokeStyle = 'rgb(255,255,255)';
+          if (e.button === 2) {
+            this.c = 'rgb(0,0,0)';
+            this.w = 33;
+          } else {
+            this.c = 'rgb(255,255,255)';
+            this.w = 1;
+          }
+          strokeStyle = this.c;
+          lineWidth = this.w;
           stroke();
           closePath();
           this.x = e.pageX;
           this.y = e.pageY;
-          this.path.push({'x':this.x,'y':this.y})
+          this.path.push({
+              'x':this.x,
+              'y':this.y,
+              'c':this.c,
+              'w':this.w
+          })
         }
       }
     },0);
+    canvas.addEventListener('contextmenu', function(e){
+        if (e.button === 2){
+            e.preventDefault();
+            return false;
+        }
+    },0)
     function connect(){
       sock = new SockJS('http://'+document.domain+':9999/sjs');
       sock.onopen = function() {
@@ -45,7 +64,8 @@ window.onload = function(){
               path[path.length-1].x,
               path[path.length-1].y
             )
-            strokeStyle = 'rgb(255,255,255)';
+            lineWidth = path[path.length-1].w;
+            strokeStyle = path[path.length-1].c;
             stroke();
             closePath();
           };

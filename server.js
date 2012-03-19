@@ -30,12 +30,14 @@ sockjs_server.on('connection', function(conn) {
               path[path.length-1].x,
               path[path.length-1].y
             )
-            strokeStyle = 'rgb(255,255,255)';
+            strokeStyle = path[path.length-1].c;
+            lineWidth = path[path.length-1].w;
+            //strokeStyle = 'rgb(255,255,255)';
             stroke();
             closePath();
           };
         };
-        console.log(message);
+        //console.log(message);
         for (var i in clients){
             clients[i].write(message);
         }

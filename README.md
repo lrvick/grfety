@@ -1,11 +1,11 @@
 # SockDraw #
 
-<http://github.com/lrvick/sockdraw>
+<http://github.com/lrvick/grfety>
 
 ## About ##
 
 Simple web based multiplayer drawing application using NodeJS, SockJS, and
-HTML5 Canvas. I hammered all this out in about 2 hours so don't expect too
+HTML5 Canvas. I hammered all this out in a few hours so don't expect too
 much, but if nothing else it should show off the power of SockJS and Canvas.
 
 ## Requirements ##
@@ -26,7 +26,7 @@ much, but if nothing else it should show off the power of SockJS and Canvas.
 1. Clone the repository
 
     ```bash
-    git clone https://github.com/lrvick/sockdraw.git
+    git clone https://github.com/lrvick/grfety.git
     cd sockdraw
     ```
 

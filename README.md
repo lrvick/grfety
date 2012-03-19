@@ -1,4 +1,4 @@
-# SockDraw *
+# SockDraw #
 
 <http://github.com/lrvick/sockdraw>
 
@@ -40,6 +40,7 @@ much, but if nothing else it should show off the power of SockJS and Canvas.
     ```bash
     node server.js
     ```
+
 ## Notes ##
 
   Use at your own risk. You may be eaten by a grue.

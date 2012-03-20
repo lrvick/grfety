@@ -54,22 +54,26 @@ window.onload = function(){
         console.log('connected');
       };
       sock.onmessage = function(msg) {
-        var path = JSON.parse(msg.data);
-        with(context){
-          while(path.length > 1){
-            beginPath();
-            point = path.pop();
-            moveTo(point.x, point.y);
-            lineTo(
-              path[path.length-1].x,
-              path[path.length-1].y
-            )
-            lineWidth = path[path.length-1].w;
-            strokeStyle = path[path.length-1].c;
-            stroke();
-            closePath();
-          };
-        };
+        var data = JSON.parse(msg.data);
+        if (data['snapshot']){
+            canvas.style.background = 'url(\''+data.snapshot+'\') no-repeat'
+        } else {
+            with(context){
+              while(data.length > 1){
+                beginPath();
+                point = data.pop();
+                moveTo(point.x, point.y);
+                lineTo(
+                  data[data.length-1].x,
+                  data[data.length-1].y
+                )
+                lineWidth = data[data.length-1].w;
+                strokeStyle = data[data.length-1].c;
+                stroke();
+                closePath();
+              };
+            };
+        }
       };
       sock.onclose = function() {
         console.log('disconnected');

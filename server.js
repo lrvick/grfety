@@ -12,13 +12,14 @@ var sockjs_server = sockjs.createServer(sockjs_opts);
 
 var http_server = http.createServer();
 
-var clients = []
+var clients = [];
 
-var canvas = new Canvas(1280,1024)
-var context = canvas.getContext('2d')
+var canvas = new Canvas(1280,1024);
+var context = canvas.getContext('2d');
 
 sockjs_server.on('connection', function(conn) {
     clients.push(conn);
+    conn.write(JSON.stringify({'snapshot':canvas.toDataURL()}));
     conn.on('data', function(message) {
         var path = JSON.parse(message);
         with(context){
@@ -32,7 +33,6 @@ sockjs_server.on('connection', function(conn) {
             )
             strokeStyle = path[path.length-1].c;
             lineWidth = path[path.length-1].w;
-            //strokeStyle = 'rgb(255,255,255)';
             stroke();
             closePath();
           };
@@ -44,14 +44,6 @@ sockjs_server.on('connection', function(conn) {
     });
     conn.on('close', function() {});
 });
-
-setInterval(function(){
-    var out = fs.createWriteStream(__dirname + '/snapshot.png')
-    var stream = canvas.createPNGStream();
-    stream.on('data', function(chunk){
-        out.write(chunk);
-    });
-},1000);
 
 http_server.addListener('request', function(req, res) {
      static_dir.serve(req, res);

@@ -1,4 +1,4 @@
-# SockDraw #
+# grfety #
 
 <http://github.com/lrvick/grfety>
 

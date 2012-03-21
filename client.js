@@ -1,4 +1,6 @@
 window.onload = function(){
+
+    // set stored x/y position to current touch/cursor location
     var setXY = function(e,obj){
         if (e.targetTouches){
             obj.x = e.targetTouches[0].pageX;
@@ -8,6 +10,8 @@ window.onload = function(){
             obj.y = e.pageY;
         }
     }
+
+    // draw line from last x/y to current x/y and add coords to path buffer
     var draw = function(e){
         with(context){
             if (this.down){
@@ -35,32 +39,22 @@ window.onload = function(){
             }
         }
     }
+
+    // start a new path buffer
     var start = function(e){
         this.down = true;
         this.path = [];
         setXY(e,this);
     }
+
+    // send current path buffer to server
     var end = function(e){
         this.down = false;
         sock.send(JSON.stringify(this.path))
     }
-    var canvas = document.getElementById('canvas');
-    var context = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    canvas.addEventListener('mousedown', start);
-    canvas.addEventListener('touchstart', start);
-    canvas.addEventListener('touchend', end);
-    canvas.addEventListener('mouseup', end);
-    canvas.addEventListener('mousemove', draw);
-    canvas.addEventListener('touchmove', draw);
-    canvas.addEventListener('contextmenu', function(e){
-        if (e.button === 2){
-            e.preventDefault();
-            return false;
-        }
-    },0)
-    function connect(){
+
+    // connect to server, and re-connect if disconnected
+    var connect = function(){
         sock = new SockJS('http://'+document.domain+':9999/sjs');
         sock.onopen = function() {
             console.log('connected');
@@ -92,5 +86,25 @@ window.onload = function(){
             setTimeout(function(){connect();},1000);
         };
     }
+
+    // build canvas and set up events
+    var canvas = document.getElementById('canvas');
+    var context = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    canvas.addEventListener('mousedown', start);
+    canvas.addEventListener('touchstart', start);
+    canvas.addEventListener('touchend', end);
+    canvas.addEventListener('mouseup', end);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('touchmove', draw);
+    canvas.addEventListener('contextmenu', function(e){
+        if (e.button === 2){
+            e.preventDefault();
+            return false;
+        }
+    },0)
+
+    // connect to server
     connect();
 }

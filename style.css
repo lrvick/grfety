@@ -1,0 +1,43 @@
+html,body {
+  margin:0;
+  padding:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:#000;
+}
+canvas {
+  position:absolute;
+  left:100px;
+  top:0px;
+  right:0px;
+  bottom:0px;
+}
+aside {
+  position:absolute;
+  left:0px;
+  top:0px;
+  bottom:0px;
+  width:100px;
+}
+aside span,
+aside a {
+  color:#FFF;
+  display:block;
+  width:60%;
+  text-align:center;
+  height:60px;
+  line-height:60px;
+  border:1px white solid;
+  border-radius:30px;
+  margin:0 auto;
+  margin-top:20px;
+  margin-left:20px;
+  text-decoration:none;
+  opacity:0.5;
+  font-size:15px;
+}
+aside span:hover,
+aside a:hover {
+  opacity:1.0;
+}

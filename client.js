@@ -2,11 +2,13 @@ window.onload = function(){
 
     // set stored x/y position to current touch/cursor location
     var setXY = function(e,obj){
+        var asidewidth = document.getElementsByTagName('aside')[0].offsetWidth;
+        console.log(asidewidth)
         if (e.targetTouches){
-            obj.x = e.targetTouches[0].pageX;
+            obj.x = e.targetTouches[0].pageX - asidewidth;
             obj.y = e.targetTouches[0].pageY;
         } else {
-            obj.x = e.pageX;
+            obj.x = e.pageX - asidewidth;
             obj.y = e.pageY;
         }
     }
@@ -51,6 +53,20 @@ window.onload = function(){
     var end = function(e){
         this.down = false;
         sock.send(JSON.stringify(this.path))
+        window.snapshot.src = canvas.toDataURL();
+    }
+
+    // save the canvas to a file
+    var save = function(context){
+        var buffer = context;
+        var w = buffer.canvas.width;
+        var h = buffer.canvas.height;
+        with(buffer){
+            globalCompositeOperation = "destination-over"
+            fillStyle = 'black';
+            fillRect(0,0,w,h);
+            window.open(buffer.canvas.toDataURL("image/png"),'_blank');
+        }
     }
 
     // connect to server, and re-connect if disconnected
@@ -62,7 +78,11 @@ window.onload = function(){
         sock.onmessage = function(msg) {
             var data = JSON.parse(msg.data);
             if (data['snapshot']){
-                canvas.style.background = 'url(\''+data.snapshot+'\') no-repeat'
+                window.snapshot = new Image();
+                window.snapshot.onload = function(){
+                    context.drawImage(window.snapshot,0,0);
+                }
+                window.snapshot.src = data.snapshot;
             } else {
                 with(context){
                     while(data.length > 1){
@@ -88,10 +108,16 @@ window.onload = function(){
     }
 
     // build canvas and set up events
-    var canvas = document.getElementById('canvas');
+    var canvas = document.getElementsByTagName('canvas')[0];
     var context = canvas.getContext('2d');
+    canvas.style.position = 'fixed';
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+    window.onresize = function(){
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        context.drawImage(window.snapshot,0,0);
+    }
     canvas.addEventListener('mousedown', start);
     canvas.addEventListener('touchstart', start);
     canvas.addEventListener('touchend', end);
@@ -105,6 +131,23 @@ window.onload = function(){
         }
     },0)
 
+    // set up toolbar events
+    var saveButton = document.getElementById('save');
+    saveButton.addEventListener('click', function(e){
+        e.preventDefault();
+        save(context)
+        return false;
+    });
+
+    // hide address bar for Android
+    if (window.navigator.userAgent.match('/Android/i')){
+        setTimeout(function(){
+            canvas.height = window.innerHeight + 60;
+            window.scrollTo(0,1);
+        }, 0);
+    }
+
     // connect to server
     connect();
+
 }

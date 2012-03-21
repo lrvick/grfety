@@ -14,7 +14,7 @@ var http_server = http.createServer();
 
 var clients = [];
 
-var canvas = new Canvas(1280,1024);
+var canvas = new Canvas(2056,1920);
 var context = canvas.getContext('2d');
 
 sockjs_server.on('connection', function(conn) {

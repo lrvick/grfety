@@ -20,6 +20,7 @@ much, but if nothing else it should show off the power of SockJS and Canvas.
   * Auto-reconnection
   * Right-click erase
   * Saves and restores snapshots automatically
+  * Android / IOS Support
   * You can draw with the color white
 
 ## Usage / Installation ##

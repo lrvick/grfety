@@ -36,7 +36,8 @@ aside a {
   background:url('/sprite.png') no-repeat;
 }
 
-aside a.active {
+aside a.activetool,
+aside a.activecolor {
   opacity:0.5;
 }
 

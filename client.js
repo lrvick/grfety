@@ -24,10 +24,6 @@
                 setXY(e);
                 if (e.button === 2) {
                     grfety.c = 'rgb(0,0,0)';
-                    grfety.w = 33;
-                } else {
-                    grfety.c = 'rgb(255,255,255)';
-                    grfety.w = 1;
                 }
                 strokeStyle = grfety.c;
                 lineWidth = grfety.w;
@@ -134,6 +130,16 @@
         };
     }
 
+
+    //toggle active tool in sidebar
+    function swapClass(e,cl){
+        var buttons = document.getElementsByClassName(cl);
+        Array.prototype.slice.call(buttons, 0).forEach(function(el){
+            el.className = '';
+        })
+        e.toElement.className += " "+cl;
+    }
+
     //main initialization routine
     function init(){
 
@@ -164,25 +170,50 @@
         }
 
         // set up toolbar events
-        var saveButton = document.getElementById('save');
-        saveButton.addEventListener('click', function(e){
-            e.preventDefault();
-            save()
-            return false;
-        });
-
-        // attach events to toggle sidebar on fullscreen
-        document.addEventListener("fullscreenchange", toggleaside, false);
-        document.addEventListener("mozfullscreenchange", toggleaside, false);
-        document.addEventListener("webkitfullscreenchange", toggleaside, false);
-
-        // set up toolbar events
-        var fullscreenButton = document.getElementById('fullscreen');
-        fullscreenButton.addEventListener('click', function(e){
-            e.preventDefault();
-            fullscreen();
-            return false;
-        });
+        with(document){
+            addEventListener("fullscreenchange", toggleaside, false);
+            addEventListener("mozfullscreenchange", toggleaside, false);
+            addEventListener("webkitfullscreenchange", toggleaside, false);
+            getElementById('save').addEventListener('click', function(e){
+                e.preventDefault();
+                save()
+                return false;
+            });
+            getElementById('pencil').addEventListener('click', function(e){
+                swapClass(e,'activetool');
+            });
+            getElementById('brush').addEventListener('click',function(e){
+                swapClass(e,'activetool');
+            });
+            getElementById('spray').addEventListener('click',function(e){
+                swapClass(e,'activetool');
+            });
+            getElementById('erase').addEventListener('click', function(e){
+                swapClass(e,'activetool');
+                grfety.c = 'rgb(0,0,0)';
+            });
+            getElementById('plus').addEventListener('click', function(e){
+                grfety.w += 2;
+            });
+            getElementById('minus').addEventListener('click', function(e){
+                grfety.w -= 2;
+            });
+            getElementById('color1').addEventListener('click', function(e){
+                swapClass(e,'activecolor');
+                grfety.c = grfety.color1;
+            });
+            getElementById('color2').addEventListener('click', function(e){
+                swapClass(e,'activecolor');
+                grfety.c = grfety.color2;
+            });
+            getElementById('color3').addEventListener('click', function(e){
+                swapClass(e,'activecolor');
+                grfety.c = grfety.color3;
+            });
+            getElementById('fullscreen').addEventListener('click', function(e){
+                fullscreen();
+            });
+        }
 
         // hide address bar for Android
         if (window.navigator.userAgent.match('/Android/i')){
@@ -196,6 +227,12 @@
         connect();
     }
 
+    grfety.init = init;
+    grfety.w = 1;
+    grfety.c = 'rgb(255,255,255)';
+    grfety.color1 = 'rgb(255,0,0)';
+    grfety.color2 = 'rgb(0,255,0)';
+    grfety.color3 = 'rgb(0,0,255)';
     grfety.init = init;
 
 })(this);

@@ -181,12 +181,15 @@
             });
             getElementById('pencil').addEventListener('click', function(e){
                 swapClass(e,'activetool');
+                grfety.c = grfety.colora;
             });
             getElementById('brush').addEventListener('click',function(e){
                 swapClass(e,'activetool');
+                grfety.c = grfety.colora;
             });
             getElementById('spray').addEventListener('click',function(e){
                 swapClass(e,'activetool');
+                grfety.c = grfety.colora;
             });
             getElementById('erase').addEventListener('click', function(e){
                 swapClass(e,'activetool');
@@ -201,14 +204,17 @@
             getElementById('color1').addEventListener('click', function(e){
                 swapClass(e,'activecolor');
                 grfety.c = grfety.color1;
+                grfety.colora = grfety.color1;
             });
             getElementById('color2').addEventListener('click', function(e){
                 swapClass(e,'activecolor');
                 grfety.c = grfety.color2;
+                grfety.colora = grfety.color2;
             });
             getElementById('color3').addEventListener('click', function(e){
                 swapClass(e,'activecolor');
                 grfety.c = grfety.color3;
+                grfety.colora = grfety.color3;
             });
             getElementById('fullscreen').addEventListener('click', function(e){
                 fullscreen();
@@ -233,6 +239,7 @@
     grfety.color1 = 'rgb(255,0,0)';
     grfety.color2 = 'rgb(0,255,0)';
     grfety.color3 = 'rgb(0,0,255)';
+    grfety.colora = grfety.color1;
     grfety.init = init;
 
 })(this);

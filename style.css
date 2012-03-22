@@ -20,24 +20,66 @@ aside {
   bottom:0px;
   width:100px;
 }
-aside span,
 aside a {
-  color:#FFF;
   display:block;
-  width:60%;
+  width:48px;
   text-align:center;
-  height:60px;
+  height:48px;
   line-height:60px;
-  border:1px white solid;
-  border-radius:30px;
   margin:0 auto;
-  margin-top:20px;
-  margin-left:20px;
+  margin-top:12px;
+  margin-left:12px;
   text-decoration:none;
-  opacity:0.5;
+  opacity:0.2;
   font-size:15px;
+  text-indent:-999px;
+  background:url('/sprite.png') no-repeat;
 }
-aside span:hover,
+
+aside a.active {
+  opacity:0.5;
+}
+
 aside a:hover {
   opacity:1.0;
+  text-indent:70px;
+  color:#FFF;
+  font-size:20px;
+  text-shadow:
+    2px 2px 0 #000,
+    -2px -2px 0 #000,
+    2px -2px 0 #000,
+    -2px 2px 0 #000,
+    2px 2px 0 #000;
+}
+
+
+aside #save {
+  background-position: 0px 0px;
+}
+aside #pencil {
+  background-position: -50px 0px;
+}
+aside #brush {
+  background-position: -105px 0px;
+}
+aside #spray {
+  background-position: -155px 0px;
+}
+aside #erase {
+  background-position: -210px 0px;
+}
+aside #color1,
+aside #color2,
+aside #color3 {
+  background-position: -265px 0px;
+}
+aside #plus {
+  background-position: -310px 0px;
+}
+aside #minus {
+  background-position: -360px 0px;
+}
+aside #fullscreen {
+  background-position: -410px 0px;
 }

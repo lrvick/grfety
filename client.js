@@ -1,64 +1,66 @@
-window.onload = function(){
+(function(root){
+
+    //set up namespace
+    var grfety = typeof exports != 'undefined' ? exports : root.grfety = {}
 
     // set stored x/y position to current touch/cursor location
-    var setXY = function(e,obj){
+    function setXY(e){
         var asidewidth = document.getElementsByTagName('aside')[0].offsetWidth;
-        console.log(asidewidth)
         if (e.targetTouches){
-            obj.x = e.targetTouches[0].pageX - asidewidth;
-            obj.y = e.targetTouches[0].pageY;
+            grfety.x = e.targetTouches[0].pageX - asidewidth;
+            grfety.y = e.targetTouches[0].pageY;
         } else {
-            obj.x = e.pageX - asidewidth;
-            obj.y = e.pageY;
+            grfety.x = e.pageX - asidewidth;
+            grfety.y = e.pageY;
         }
     }
 
     // draw line from last x/y to current x/y and add coords to path buffer
-    var draw = function(e){
-        with(context){
-            if (this.down){
+    function draw(e){
+        with(grfety.context){
+            if (grfety.down){
                 beginPath();
-                moveTo(this.x, this.y);
-                setXY(e,this);
+                moveTo(grfety.x, grfety.y);
+                setXY(e);
                 if (e.button === 2) {
-                    this.c = 'rgb(0,0,0)';
-                    this.w = 33;
+                    grfety.c = 'rgb(0,0,0)';
+                    grfety.w = 33;
                 } else {
-                    this.c = 'rgb(255,255,255)';
-                    this.w = 1;
+                    grfety.c = 'rgb(255,255,255)';
+                    grfety.w = 1;
                 }
-                strokeStyle = this.c;
-                lineWidth = this.w;
-                lineTo(this.x, this.y)
+                strokeStyle = grfety.c;
+                lineWidth = grfety.w;
+                lineTo(grfety.x, grfety.y)
                 stroke();
                 closePath();
-                this.path.push({
-                    'x':this.x,
-                    'y':this.y,
-                    'c':this.c,
-                    'w':this.w
+                grfety.path.push({
+                    'x':grfety.x,
+                    'y':grfety.y,
+                    'c':grfety.c,
+                    'w':grfety.w
                 });
             }
         }
     }
 
     // start a new path buffer
-    var start = function(e){
-        this.down = true;
-        this.path = [];
-        setXY(e,this);
+    function start(e){
+        grfety.down = true;
+        grfety.path = [];
+        setXY(e);
     }
 
     // send current path buffer to server
-    var end = function(e){
-        this.down = false;
-        sock.send(JSON.stringify(this.path))
-        window.snapshot.src = canvas.toDataURL();
+    function end(e){
+        grfety.down = false;
+        sock.send(JSON.stringify(grfety.path))
+        window.snapshot.src = grfety.canvas.toDataURL();
     }
 
     // save the canvas to a file
-    var save = function(context){
-        var buffer = context;
+    function save(){
+        var buffer = grfety.context;
         var w = buffer.canvas.width;
         var h = buffer.canvas.height;
         with(buffer){
@@ -69,8 +71,33 @@ window.onload = function(){
         }
     }
 
+    //toggle sidebar visibility
+    function toggleaside(e){
+        var aside = document.getElementsByTagName('aside')[0];
+        if (aside.style.display == 'none'){
+            aside.style.display = 'block';
+        } else {
+            aside.style.display = 'none';
+        }
+        setXY(e);
+    }
+
+    // make browser fullscreen
+    function fullscreen(){
+        var doc = document.documentElement;
+        if (doc.requestFullscreen) {
+            doc.requestFullscreen();
+        }
+        else if (doc.mozRequestFullScreen) {
+            doc.mozRequestFullScreen();
+        }
+        else if (doc.webkitRequestFullScreen) {
+            doc.webkitRequestFullScreen();
+        }
+    }
+
     // connect to server, and re-connect if disconnected
-    var connect = function(){
+    function connect(){
         sock = new SockJS('http://'+document.domain+':9999/sjs');
         sock.onopen = function() {
             console.log('connected');
@@ -80,11 +107,11 @@ window.onload = function(){
             if (data['snapshot']){
                 window.snapshot = new Image();
                 window.snapshot.onload = function(){
-                    context.drawImage(window.snapshot,0,0);
+                    grfety.context.drawImage(window.snapshot,0,0);
                 }
                 window.snapshot.src = data.snapshot;
             } else {
-                with(context){
+                with(grfety.context){
                     while(data.length > 1){
                         beginPath();
                         point = data.pop();
@@ -107,47 +134,72 @@ window.onload = function(){
         };
     }
 
-    // build canvas and set up events
-    var canvas = document.getElementsByTagName('canvas')[0];
-    var context = canvas.getContext('2d');
-    canvas.style.position = 'fixed';
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    window.onresize = function(){
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        context.drawImage(window.snapshot,0,0);
-    }
-    canvas.addEventListener('mousedown', start);
-    canvas.addEventListener('touchstart', start);
-    canvas.addEventListener('touchend', end);
-    canvas.addEventListener('mouseup', end);
-    canvas.addEventListener('mousemove', draw);
-    canvas.addEventListener('touchmove', draw);
-    canvas.addEventListener('contextmenu', function(e){
-        if (e.button === 2){
-            e.preventDefault();
-            return false;
+    //main initialization routine
+    function init(){
+
+        // build canvas and set up events
+        grfety.canvas = document.getElementsByTagName('canvas')[0];
+        grfety.context = grfety.canvas.getContext('2d');
+        with(grfety.context){
+            canvas.style.position = 'fixed';
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            window.onresize = function(){
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                drawImage(window.snapshot,0,0);
+            }
+            canvas.addEventListener('mousedown', start);
+            canvas.addEventListener('touchstart', start);
+            canvas.addEventListener('touchend', end);
+            canvas.addEventListener('mouseup', end);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('touchmove', draw);
+            canvas.addEventListener('contextmenu', function(e){
+                if (e.button === 2){
+                    e.preventDefault();
+                    return false;
+                }
+            },0)
         }
-    },0)
 
-    // set up toolbar events
-    var saveButton = document.getElementById('save');
-    saveButton.addEventListener('click', function(e){
-        e.preventDefault();
-        save(context)
-        return false;
-    });
+        // set up toolbar events
+        var saveButton = document.getElementById('save');
+        saveButton.addEventListener('click', function(e){
+            e.preventDefault();
+            save()
+            return false;
+        });
 
-    // hide address bar for Android
-    if (window.navigator.userAgent.match('/Android/i')){
-        setTimeout(function(){
-            canvas.height = window.innerHeight + 60;
-            window.scrollTo(0,1);
-        }, 0);
+        // attach events to toggle sidebar on fullscreen
+        document.addEventListener("fullscreenchange", toggleaside, false);
+        document.addEventListener("mozfullscreenchange", toggleaside, false);
+        document.addEventListener("webkitfullscreenchange", toggleaside, false);
+
+        // set up toolbar events
+        var fullscreenButton = document.getElementById('fullscreen');
+        fullscreenButton.addEventListener('click', function(e){
+            e.preventDefault();
+            fullscreen();
+            return false;
+        });
+
+        // hide address bar for Android
+        if (window.navigator.userAgent.match('/Android/i')){
+            setTimeout(function(){
+                canvas.height = window.innerHeight + 60;
+                window.scrollTo(0,1);
+            }, 0);
+        }
+
+        // connect to server
+        connect();
     }
 
-    // connect to server
-    connect();
+    grfety.init = init;
 
+})(this);
+
+window.onload = function(){
+    grfety.init();
 }

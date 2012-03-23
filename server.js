@@ -1,3 +1,5 @@
+#!/usr/bin/node
+
 var http = require('http');
 var fs = require('fs');
 var sockjs = require('sockjs');

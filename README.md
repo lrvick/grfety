@@ -41,7 +41,7 @@ much, but if nothing else it should show off the power of SockJS and Canvas.
 3. Start server
 
     ```bash
-    node server.js
+    ./server.js
     ```
 
 ## Notes ##

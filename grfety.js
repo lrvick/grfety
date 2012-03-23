@@ -19,23 +19,20 @@
     function draw(e){
         with(grfety.context){
             if (grfety.down){
-                beginPath();
-                moveTo(grfety.x, grfety.y);
                 setXY(e);
                 if (e.button === 2) {
                     grfety.c = 'rgb(0,0,0)';
                 }
-                strokeStyle = grfety.c;
-                lineWidth = grfety.w;
-                lineTo(grfety.x, grfety.y)
-                stroke();
-                closePath();
                 grfety.path.push({
                     'x':grfety.x,
                     'y':grfety.y,
                     'c':grfety.c,
-                    'w':grfety.w
+                    'w':grfety.w,
+                    'b':grfety.b
                 });
+                if (grfety.path.length > 1){
+                    grfety.brushes[grfety.b].draw()
+                }
             }
         }
     }
@@ -182,6 +179,7 @@
             getElementById('pencil').addEventListener('click', function(e){
                 swapClass(e,'activetool');
                 grfety.c = grfety.colora;
+                grfety.b = 'pencil';
             });
             getElementById('brush').addEventListener('click',function(e){
                 swapClass(e,'activetool');
@@ -190,6 +188,7 @@
             getElementById('spray').addEventListener('click',function(e){
                 swapClass(e,'activetool');
                 grfety.c = grfety.colora;
+                grfety.b = 'spray';
             });
             getElementById('erase').addEventListener('click', function(e){
                 swapClass(e,'activetool');
@@ -236,14 +235,69 @@
     grfety.init = init;
     grfety.w = 1;
     grfety.c = 'rgb(255,255,255)';
+    grfety.b = 'pencil';
     grfety.color1 = 'rgb(255,0,0)';
     grfety.color2 = 'rgb(0,255,0)';
     grfety.color3 = 'rgb(0,0,255)';
     grfety.colora = grfety.color1;
     grfety.init = init;
+    grfety.brushes = {};
 
 })(this);
 
-window.onload = function(){
-    grfety.init();
+// brush modules
+
+grfety.brushes['pencil'] = {
+    draw : function(){
+        with(grfety.context){
+            beginPath();
+            strokeStyle = grfety.c;
+            lineWidth = grfety.w;
+            moveTo(
+                grfety.path[grfety.path.length -1].x,
+                grfety.path[grfety.path.length -1].y
+            );
+            lineTo(
+                grfety.path[grfety.path.length -2].x,
+                grfety.path[grfety.path.length -2].y
+            );
+            stroke();
+            closePath();
+        }
+    }
+}
+
+grfety.brushes['spray'] = {
+    rand : function(){
+        return Math.random() * (grfety.w - 50) + grfety.w;
+    },
+    draw : function(){
+        with(grfety.context){
+            beginPath();
+            strokeStyle = grfety.c;
+            lineWidth = 0.5;
+            moveTo(
+                grfety.path[grfety.path.length -1].x,
+                grfety.path[grfety.path.length -1].y
+            );
+            lineTo(
+                grfety.path[grfety.path.length -2].x,
+                grfety.path[grfety.path.length -2].y
+            );
+            stroke();
+            for (i=1;i<20;i++){
+                lineWidth = 0.5;
+                moveTo(
+                    grfety.path[grfety.path.length -1].x - this.rand(),
+                    grfety.path[grfety.path.length -1].y - this.rand()
+                );
+                lineTo(
+                    grfety.path[grfety.path.length -2].x - this.rand(),
+                    grfety.path[grfety.path.length -2].y - this.rand()
+                );
+                stroke();
+            }
+        closePath();
+        }
+    }
 }

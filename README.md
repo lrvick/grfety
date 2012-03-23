@@ -29,7 +29,7 @@ much, but if nothing else it should show off the power of SockJS and Canvas.
 
     ```bash
     git clone https://github.com/lrvick/grfety.git
-    cd sockdraw
+    cd grfety
     ```
 
 2. Install node modules

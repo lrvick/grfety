@@ -136,6 +136,15 @@
     //main initialization routine
     function init(){
 
+        // set up brush select box
+
+        var select = document.getElementsByTagName('select')[0];
+        Object.keys(grfety.brushes).forEach(function(brush){
+            var option = new Option(brush,brush);
+            select.options[select.options.length] = option;
+        })
+
+
         // build canvas and set up events
         grfety.canvas = document.getElementsByTagName('canvas')[0];
         grfety.context = grfety.canvas.getContext('2d');
@@ -167,28 +176,13 @@
             addEventListener("fullscreenchange", toggleaside, false);
             addEventListener("mozfullscreenchange", toggleaside, false);
             addEventListener("webkitfullscreenchange", toggleaside, false);
+            getElementsByTagName('select')[0].addEventListener('change', function(e){
+                grfety.b = e.target.value;
+            });
             getElementById('save').addEventListener('click', function(e){
                 e.preventDefault();
                 save()
                 return false;
-            });
-            getElementById('pencil').addEventListener('click', function(e){
-                swapClass(e,'activetool');
-                grfety.c = grfety.colora;
-                grfety.b = 'pencil';
-            });
-            getElementById('brush').addEventListener('click',function(e){
-                swapClass(e,'activetool');
-                grfety.c = grfety.colora;
-            });
-            getElementById('spray').addEventListener('click',function(e){
-                swapClass(e,'activetool');
-                grfety.c = grfety.colora;
-                grfety.b = 'spray';
-            });
-            getElementById('erase').addEventListener('click', function(e){
-                swapClass(e,'activetool');
-                grfety.c = 'rgb(0,0,0)';
             });
             getElementById('plus').addEventListener('click', function(e){
                 grfety.w += 2;

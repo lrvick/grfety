@@ -5,13 +5,13 @@
 
     // set stored x/y position to current touch/cursor location
     function setXY(e){
-        var asidewidth = document.getElementsByTagName('aside')[0].offsetWidth;
+        var headerheight = document.getElementsByTagName('header')[0].offsetHeight;
         if (e.targetTouches){
-            grfety.x = e.targetTouches[0].pageX - asidewidth;
-            grfety.y = e.targetTouches[0].pageY;
+            grfety.x = e.targetTouches[0].pageX;
+            grfety.y = e.targetTouches[0].pageY - headerheight;
         } else {
-            grfety.x = e.pageX - asidewidth;
-            grfety.y = e.pageY;
+            grfety.x = e.pageX;
+            grfety.y = e.pageY - headerheight;
         }
     }
 

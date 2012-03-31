@@ -7,6 +7,7 @@
     <meta name="MobileOptimized" content="320"/>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link href='http://fonts.googleapis.com/css?family=Jolly+Lodger' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" media="screen" href="style.css">
     <script src="http://cdn.sockjs.org/sockjs-0.2.min.js" type="text/javascript"></script>
     <script src="grfety.js" type="text/javascript"></script>
@@ -17,21 +18,22 @@
     </script>
   </head>
   <body>
-    <canvas>
-    </canvas>
-    <aside>
-      <a id="save" href="#">save</a>
-      <a id="pencil" class="activetool" href="#">pencil</a>
-      <a id="brush" href="#">brush</a>
-      <a id="spray" href="#">spray</a>
-      <a id="erase" href="#">erase</a>
-      <a id="plus" href="#">plus</a>
-      <a id="minus" href="#">minus</a>
-      <a id="color1" class="activecolor" href="#">color1</a>
-      <a id="color2" href="#">color2</a>
-      <a id="color3" href="#">color3</a>
-      <a id="fullscreen" href="#">fullscreen</a>
-      -->
-    </aside>
+    <header>
+      <h1>grfety</h1>
+      <nav>
+        <a id="pencil" class="activetool" href="#">pencil</a>
+        <a id="brush" href="#">brush</a>
+        <a id="spray" href="#">spray</a>
+        <a id="erase" href="#">erase</a>
+        <a id="plus" href="#">+</a>
+        <a id="minus" href="#">-</a>
+        <a id="color1" class="activecolor" href="#">color1</a>
+        <a id="color2" href="#">color2</a>
+        <a id="color3" href="#">color3</a>
+        <a id="save" href="#">save</a>
+        <a id="fullscreen" href="#">fullscreen</a>
+      </nav>
+    </header>
+    <canvas></canvas>
   </body>
 </html>

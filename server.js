@@ -5,7 +5,7 @@ var fs = require('fs');
 var sockjs = require('sockjs');
 var node_static = require('node-static');
 var Canvas = require('canvas')
-//var grfety = require('./grfety.js')
+var grfety = require('./grfety.js')
 
 var static_dir = new node_static.Server(__dirname);
 
@@ -18,27 +18,21 @@ var http_server = http.createServer();
 var sockets = [];
 
 var canvas = new Canvas(2056,1920);
-var context = canvas.getContext('2d');
+
+grfety.context = canvas.getContext('2d');
 
 sockjs_server.on('connection', function(socket) {
     sockets.push(socket);
     socket.write(JSON.stringify({'snapshot':canvas.toDataURL()}));
     socket.on('data', function(message) {
-        var path = JSON.parse(message);
-        with(context){
-          while(path.length > 1){
-            beginPath();
-            point = path.pop();
-            moveTo(point.x, point.y);
-            lineTo(
-              path[path.length-1].x,
-              path[path.length-1].y
-            )
-            strokeStyle = path[path.length-1].c;
-            lineWidth = path[path.length-1].w;
-            stroke();
-            closePath();
-          };
+        var data = JSON.parse(message);
+        grfety.path = []
+        while(data.length > 0){
+            var item = data.pop()
+            grfety.path.push(item);
+            if (grfety.path.length > 1){
+                grfety.brushes[item.b].draw(item)
+            }
         };
         for (var i in sockets){
             if (sockets[i] == socket) continue;

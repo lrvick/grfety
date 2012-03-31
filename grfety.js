@@ -23,15 +23,16 @@
                 if (e.button === 2) {
                     grfety.c = 'rgb(0,0,0)';
                 }
-                grfety.path.push({
+                var line = {
                     'x':grfety.x,
                     'y':grfety.y,
                     'c':grfety.c,
                     'w':grfety.w,
                     'b':grfety.b
-                });
+                };
+                grfety.path.push(line);
                 if (grfety.path.length > 1){
-                    grfety.brushes[grfety.b].draw()
+                    grfety.brushes[grfety.b].draw(line)
                 }
             }
         }
@@ -48,7 +49,6 @@
     function end(e){
         grfety.down = false;
         sock.send(JSON.stringify(grfety.path))
-        window.snapshot.src = grfety.canvas.toDataURL();
     }
 
     // save the canvas to a file
@@ -105,19 +105,15 @@
                 window.snapshot.src = data.snapshot;
             } else {
                 with(grfety.context){
-                    while(data.length > 1){
-                        beginPath();
-                        point = data.pop();
-                        moveTo(point.x, point.y);
-                        lineTo(
-                                data[data.length-1].x,
-                                data[data.length-1].y
-                              )
-                            lineWidth = data[data.length-1].w;
-                        strokeStyle = data[data.length-1].c;
-                        stroke();
-                        closePath();
+                    grfety.path = []
+                    while(data.length > 0){
+                        var item = data.pop()
+                        grfety.path.push(item);
+                        if (grfety.path.length > 1){
+                            grfety.brushes[item.b].draw(item)
+                        }
                     };
+                    grfety.path = []
                 };
             }
         };
@@ -248,11 +244,11 @@
 // brush modules
 
 grfety.brushes['pencil'] = {
-    draw : function(){
+    draw : function(line){
         with(grfety.context){
             beginPath();
-            strokeStyle = grfety.c;
-            lineWidth = grfety.w;
+            strokeStyle = line.c;
+            lineWidth = line.w;
             moveTo(
                 grfety.path[grfety.path.length -1].x,
                 grfety.path[grfety.path.length -1].y
@@ -271,10 +267,10 @@ grfety.brushes['spray'] = {
     rand : function(){
         return Math.random() * (grfety.w - 50) + grfety.w;
     },
-    draw : function(){
+    draw : function(line){
         with(grfety.context){
             beginPath();
-            strokeStyle = grfety.c;
+            strokeStyle = line.c;
             lineWidth = 0.5;
             moveTo(
                 grfety.path[grfety.path.length -1].x,

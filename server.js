@@ -5,6 +5,7 @@ var fs = require('fs');
 var sockjs = require('sockjs');
 var node_static = require('node-static');
 var Canvas = require('canvas')
+//var grfety = require('./grfety.js')
 
 var static_dir = new node_static.Server(__dirname);
 
@@ -14,15 +15,15 @@ var sockjs_server = sockjs.createServer(sockjs_opts);
 
 var http_server = http.createServer();
 
-var clients = [];
+var sockets = [];
 
 var canvas = new Canvas(2056,1920);
 var context = canvas.getContext('2d');
 
-sockjs_server.on('connection', function(conn) {
-    clients.push(conn);
-    conn.write(JSON.stringify({'snapshot':canvas.toDataURL()}));
-    conn.on('data', function(message) {
+sockjs_server.on('connection', function(socket) {
+    sockets.push(socket);
+    socket.write(JSON.stringify({'snapshot':canvas.toDataURL()}));
+    socket.on('data', function(message) {
         var path = JSON.parse(message);
         with(context){
           while(path.length > 1){
@@ -39,12 +40,15 @@ sockjs_server.on('connection', function(conn) {
             closePath();
           };
         };
-        //console.log(message);
-        for (var i in clients){
-            clients[i].write(message);
+        for (var i in sockets){
+            if (sockets[i] == socket) continue;
+            sockets[i].write(message);
         }
     });
-    conn.on('close', function() {});
+    socket.on('end', function() {
+        var i = sockets.indexOf(socket)
+        sockets.splice(i,1)
+    });
 });
 
 http_server.addListener('request', function(req, res) {

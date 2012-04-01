@@ -240,9 +240,9 @@
     grfety.brushes['pencil'] = {
         draw : function(line){
             with(grfety.context){
-                beginPath();
                 strokeStyle = line.c;
                 lineWidth = line.w;
+                beginPath();
                 moveTo(
                     grfety.path[grfety.path.length -1].x,
                     grfety.path[grfety.path.length -1].y
@@ -252,34 +252,80 @@
                     grfety.path[grfety.path.length -2].y
                 );
                 stroke();
-                closePath();
             }
         }
     }
 
-    grfety.brushes['spray'] = {
+    grfety.brushes['randlines'] = {
         rand : function(){
             return Math.random() * (grfety.w - 50) + grfety.w;
         },
         draw : function(line){
             with(grfety.context){
-                beginPath();
                 strokeStyle = line.c;
-                lineWidth = 0.5;
-                stroke();
-                for (i=1;i<20;i++){
-                    lineWidth = 0.5;
+                lineWidth = 0.05;
+                for (i=1;i<100;i++){
+                    beginPath();
                     moveTo(
-                        grfety.path[grfety.path.length -1].x - this.rand(),
-                        grfety.path[grfety.path.length -1].y - this.rand()
+                        grfety.path[grfety.path.length -1].x - this.rand() * (line.w / 10),
+                        grfety.path[grfety.path.length -1].y - this.rand() * (line.w / 10)
                     );
                     lineTo(
-                        grfety.path[grfety.path.length -2].x - this.rand(),
-                        grfety.path[grfety.path.length -2].y - this.rand()
+                        grfety.path[grfety.path.length -2].x - this.rand() * (line.w / 10),
+                        grfety.path[grfety.path.length -2].y - this.rand() * (line.w / 10)
                     );
                     stroke();
                 }
-            closePath();
+            }
+        }
+    }
+
+    grfety.brushes['fishnet'] = {
+        draw : function(line){
+            with(grfety.context){
+                strokeStyle = line.c;
+                lineWidth = line.w / 100 * 5;
+                if (grfety.path.length > 15){
+                    for (i=1;i<15;i++){
+                        beginPath();
+                        moveTo(
+                            grfety.path[grfety.path.length -1].x,
+                            grfety.path[grfety.path.length -1].y
+                        );
+                        lineTo(
+                            grfety.path[grfety.path.length -i].x,
+                            grfety.path[grfety.path.length -i].y
+                        );
+                        stroke();
+                    }
+                }
+            }
+        }
+    }
+
+    grfety.brushes['furry'] = {
+        draw : function(line){
+            with(grfety.context){
+                strokeStyle = line.c;
+                lineWidth = line.w / 100 * 5;
+                for (var i=1;i<grfety.path.length;i++){
+                    var e = -Math.random()
+                    var b = grfety.path[grfety.path.length -1].x - grfety.path[grfety.path.length -i].x
+                    var a = grfety.path[grfety.path.length -1].y - grfety.path[grfety.path.length -i].y
+                    var h = b * b + a * a;
+                    if (h < (2000*line.w) && Math.random() > h / (2000*line.w)) {
+                        beginPath();
+                        moveTo(
+                            grfety.path[grfety.path.length -2].x + (b * e),
+                            grfety.path[grfety.path.length -2].y + (a * e)
+                        );
+                        lineTo(
+                            grfety.path[grfety.path.length -1].x - (b * e) + e * 2,
+                            grfety.path[grfety.path.length -1].y - (a * e) + e * 2
+                        );
+                        stroke();
+                    }
+                }
             }
         }
     }

@@ -1,11 +1,13 @@
 html,body {
-  margin:0;
-  padding:0;
   width:100%;
   height:100%;
   overflow:hidden;
   background:#000;
   font-family:Jolly Lodger;
+}
+* {
+  margin:0;
+  padding:0;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -13,10 +15,11 @@ html,body {
   -ms-user-select: none;
   user-select: none;
 }
+
 canvas {
   position:absolute;
   left:0px;
-  top:50px;
+  top:35px;
   right:0px;
   bottom:0px;
 }
@@ -25,25 +28,25 @@ header {
   left:0px;
   top:0px;
   right:0px;
-  height:40px;
+  height:35px;
   background:#666;
   overflow:hidden;
   background-color:#030303;
-  background-image: -moz-linear-gradient(top , #030303, #999999 0px,#000000 118px);
-  background-image: -webkit-linear-gradient(top , #030303, #999999 0px,#000000 118px);
-  background-image: -o-linear-gradient(top , #030303, #999999 0px,#000000 118px);
-  background-image: -ms-linear-gradient(top , #030303, #999999 0px,#000000 118px);
-  background-image: linear-gradient(top , #030303, #999999 0px,#000000 118px)
+  background-image: -moz-linear-gradient(top , #030303, #999999 0px,#000000 45px);
+  background-image: -webkit-linear-gradient(top , #030303, #999999 0px,#000000 45px);
+  background-image: -o-linear-gradient(top , #030303, #999999 0px,#000000 45px);
+  background-image: -ms-linear-gradient(top , #030303, #999999 0px,#000000 45px);
+  background-image: linear-gradient(top , #030303, #999999 0px,#000000 45px)
 }
 
 header h1 {
   position:absolute;
-  top:-7px;
+  top:12px;
   left:10px;
   line-height:10px;
   color: #ffffff;
   font-weight:bold;
-  font-size: 30px;
+  font-size: 23px;
   letter-spacing:2px;
   text-shadow:0px 0px 0 rgb(202,202,202),1px 1px 0 rgb(158,158,158), 2px 2px 0 rgb(115,115,115),3px 3px 2px rgba(0,0,0,0.4),3px 3px 1px rgba(0,0,0,0.5),0px 0px 2px rgba(0,0,0,.2);
   -webkit-transform: rotate(-3deg);
@@ -52,33 +55,72 @@ header h1 {
   writing-mode: lr-tb;
 }
 
-header nav {
+header #tools {
   display:block;
   height:100%;
-  margin-left:200px;
   position:absolute;
   top:0px;
-  right:0px;
+  right:30px;
   bottom:0px;
 }
 
-header nav a {
+header #tools a,
+header #tools div {
   display:inline-block;
-  border-left:1px black solid;
-  border-right:1px black solid;
-  font-size:20px;
-  height:100%;
-  padding:6px 10px;
   text-decoration:none;
   color:#000;
-  opacity:0.3;
   overflow:hidden;
-  margin-left:-4px;
+  margin-top:8px;
 }
 
-header nav a.activetool,
-header nav a.activecolor {
-  opacity:0.5;
+header #tools .color{
+  border:1px black solid;
+  height:15px;
+  width:15px;
+  text-indent:-9999px;
+  margin-right:10px;
+  border-radius:3px;
+  -moz-box-shadow: inset -1px -1px 1px #888;
+  -webkit-box-shadow: inset -1px -1px 1px #333;
+  box-shadow: inset -1px -1px 5px #000;
+}
+
+header #tools select {
+  opacity:0.3;
+  position:absolute;
+  left:-90px;
+  top:7px;
+}
+
+header #tools input {
+  opacity:0.4;
+  height:14px;
+  margin-right:5px;
+  width:80px;
+}
+
+header #tools #alpharange {
+  width:50px;
+}
+
+header #tools #save {
+  line-height:18px;
+  font-size:25px;
+  text-shadow:0px 0px 0 rgb(202,202,202),1px 1px 0 rgb(158,158,158), 2px 2px 0 rgb(115,115,115),3px 3px 2px rgba(0,0,0,0.4),3px 3px 1px rgba(0,0,0,0.5),0px 0px 2px rgba(0,0,0,.2);
+  -webkit-transform: rotate(-3deg);
+  -moz-transform: rotate(-3deg);
+  -o-transform: rotate(-3deg);
+  writing-mode: lr-tb;
+  position:absolute;
+  right:-35px;
+  margin-right:10px;
+}
+
+header #tools a.activetool,
+header #tools a.activecolor {
+  -moz-box-shadow: inset -5px -5px 5px #888;
+  -webkit-box-shadow: inset -5px -5px 5px #888;
+  box-shadow: inset 1px 1px 5px #000;
 }
 
 header nav a:hover {

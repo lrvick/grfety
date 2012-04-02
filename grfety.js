@@ -48,7 +48,7 @@
     // send current path buffer to server
     function end(e){
         grfety.down = false;
-        sock.send(JSON.stringify(grfety.path))
+        sock.send(JSON.stringify({'type':'path','path':grfety.path}))
     }
 
     // save the canvas to a file
@@ -97,17 +97,18 @@
         };
         sock.onmessage = function(msg) {
             var data = JSON.parse(msg.data);
-            if (data['snapshot']){
+            if (data.type == 'snapshot'){
                 window.snapshot = new Image();
                 window.snapshot.onload = function(){
                     grfety.context.drawImage(window.snapshot,0,0);
                 }
                 window.snapshot.src = data.snapshot;
-            } else {
+            }
+            if (data.type == 'path'){
                 with(grfety.context){
                     grfety.path = []
-                    while(data.length > 0){
-                        var item = data.pop()
+                    while(data.path.length > 0){
+                        var item = data.path.pop()
                         grfety.path.push(item);
                         if (grfety.path.length > 1){
                             grfety.brushes[item.b].draw(item)
@@ -115,6 +116,10 @@
                     };
                     grfety.path = []
                 };
+            }
+            if (data.type == 'stats'){
+                var usercount = document.getElementById('usercount');
+                usercount.innerHTML= data.usercount;
             }
         };
         sock.onclose = function() {
@@ -128,7 +133,7 @@
     function swapClass(e,cl){
         var buttons = document.getElementsByClassName(cl);
         Array.prototype.slice.call(buttons, 0).forEach(function(el){
-            el.className = '';
+            el.className = 'color';
         })
         e.toElement.className += " "+cl;
     }
@@ -171,8 +176,13 @@
             },0)
         }
 
+
+
         // set up toolbar events
         with(document){
+            getElementById('color1').style.background = grfety.color1;
+            getElementById('color2').style.background = grfety.color2;
+            getElementById('color3').style.background = grfety.color3;
             addEventListener("fullscreenchange", toggleaside, false);
             addEventListener("mozfullscreenchange", toggleaside, false);
             addEventListener("webkitfullscreenchange", toggleaside, false);
@@ -184,11 +194,12 @@
                 save()
                 return false;
             });
-            getElementById('plus').addEventListener('click', function(e){
-                grfety.w += 2;
+            getElementById('sizerange').addEventListener('change', function(e){
+                grfety.w = e.target.value;
             });
-            getElementById('minus').addEventListener('click', function(e){
-                grfety.w -= 2;
+            getElementById('alpharange').addEventListener('change', function(e){
+                grfety.a = e.target.value;
+                grfety.context.globalAlpha = e.target.value / 100;
             });
             getElementById('color1').addEventListener('click', function(e){
                 swapClass(e,'activecolor');
@@ -204,9 +215,6 @@
                 swapClass(e,'activecolor');
                 grfety.c = grfety.color3;
                 grfety.colora = grfety.color3;
-            });
-            getElementById('fullscreen').addEventListener('click', function(e){
-                fullscreen();
             });
         }
 
@@ -228,9 +236,9 @@
     grfety.w = 1;
     grfety.c = 'rgb(255,255,255)';
     grfety.b = 'pencil';
-    grfety.color1 = 'rgb(255,0,0)';
-    grfety.color2 = 'rgb(0,255,0)';
-    grfety.color3 = 'rgb(0,0,255)';
+    grfety.color1 = 'rgb(180,0,0)';
+    grfety.color2 = 'rgb(0,180,0)';
+    grfety.color3 = 'rgb(0,0,180)';
     grfety.colora = grfety.color1;
     grfety.init = init;
     grfety.brushes = {};

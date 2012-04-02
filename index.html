@@ -20,16 +20,24 @@
   <body>
     <header>
       <h1>grfety</h1>
-      <nav>
-        <select></select>
-        <a id="plus" href="#">+</a>
-        <a id="minus" href="#">-</a>
-        <a id="color1" class="activecolor" href="#">color1</a>
-        <a id="color2" href="#">color2</a>
-        <a id="color3" href="#">color3</a>
-        <a id="save" href="#">save</a>
-        <a id="fullscreen" href="#">fullscreen</a>
-      </nav>
+      <div id="tools">
+        <div id="bushes">
+          <select id='brushselect'></select>
+        </div>
+        <div id="size">
+          <input id="sizerange" type="range" min="1" max="100" value="1" step="1">
+        </div>
+        <a id="color1" class="color activecolor" href="#">color1</a>
+        <a id="color2" class="color" href="#">color2</a>
+        <a id="color3" class="color" href="#">color3</a>
+        <div id="alpha">
+          <input id="alpharange" type="range" min="1" max="100" value="100" step="1">
+        </div>
+        <a id="save" href="#">&#10003;</a>
+        <div id='users'>
+          <span id='usercount'></span> Users
+        </div>
+      </div>
     </header>
     <canvas></canvas>
   </body>

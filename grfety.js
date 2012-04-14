@@ -91,7 +91,7 @@
 
     // connect to server, and re-connect if disconnected
     function connect(){
-        sock = new SockJS('http://'+document.domain+':9999/sjs');
+        sock = new SockJS('http://'+document.domain+':'+location.port+'/sjs');
         sock.onopen = function() {
             console.log('connected');
         };

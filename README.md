@@ -41,8 +41,10 @@ much, but if nothing else it should show off the power of SockJS and Canvas.
 3. Start server
 
     ```bash
-    ./server.js
+    ./server.js 9999
     ```
+
+  Port number will default to 9999 if none is specified
 
 ## Notes ##
 

@@ -15,6 +15,10 @@ var sockjs_server = sockjs.createServer(sockjs_opts);
 
 var http_server = http.createServer();
 
+var port = process.argv[2] || 9999;
+
+var host = '0.0.0.0';
+
 var sockets = [];
 
 var canvas = new Canvas(2056,1920);
@@ -65,4 +69,6 @@ http_server.addListener('upgrade', function(req, res) {
 
 sockjs_server.installHandlers(http_server, {prefix:'/sjs'});
 
-http_server.listen(9999, '0.0.0.0');
+http_server.listen(port, host);
+
+console.log('grfety is listening on '+host+':'+port)

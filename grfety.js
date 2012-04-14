@@ -266,21 +266,21 @@
 
     grfety.brushes['randlines'] = {
         rand : function(){
-            return Math.random() * (grfety.w - 50) + grfety.w;
+            return Math.random()*3-1.5;
         },
         draw : function(line){
             with(grfety.context){
                 strokeStyle = line.c;
                 lineWidth = 0.05;
-                for (i=1;i<100;i++){
+                for (i=1;i<50;i++){
                     beginPath();
                     moveTo(
-                        grfety.path[grfety.path.length -1].x - this.rand() * (line.w / 10),
-                        grfety.path[grfety.path.length -1].y - this.rand() * (line.w / 10)
+                        grfety.path[grfety.path.length -1].x + this.rand() * line.w,
+                        grfety.path[grfety.path.length -1].y + this.rand() * line.w
                     );
                     lineTo(
-                        grfety.path[grfety.path.length -2].x - this.rand() * (line.w / 10),
-                        grfety.path[grfety.path.length -2].y - this.rand() * (line.w / 10)
+                        grfety.path[grfety.path.length -2].x + this.rand() * line.w,
+                        grfety.path[grfety.path.length -2].y + this.rand() * line.w
                     );
                     stroke();
                 }
